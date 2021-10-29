@@ -12,10 +12,13 @@
 // logic to check if
 // to, past
 
-// function to split and convert to numbers the components
-// receives a hh:mm string returns [hours, minutes] number array
+function getNumericalComponents(timeString) {
+  const [hours, minutes] = timeString.split(':');
 
-export function convertTimeToWords(numericTime) {
+  return [parseInt(hours), parseInt(minutes)];
+}
+
+export function convertTimeToWords(timeString) {
   // TODO: real code goes here!
   if (numericTime === '0:00') {
     return 'midnight';
