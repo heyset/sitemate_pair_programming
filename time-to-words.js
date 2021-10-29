@@ -9,8 +9,15 @@
 // twenty
 // 30 -> half
 
-// logic to check if
-// to, past
+function getRelativeDescription(minutes) {
+  if (minutes === 0) {
+    return '';
+  } else if (minutes > 30) {
+    return 'to';
+  } else {
+    return 'past';
+  }
+}
 
 function getNumericalComponents(timeString) {
   const [hours, minutes] = timeString.split(':');
