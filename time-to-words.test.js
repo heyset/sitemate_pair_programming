@@ -30,4 +30,9 @@ describe('Time to words', () => {
     const timeInWords = convertTimeToWords('19:14');
     expect(timeInWords).toBe('fourteen past seven');
   });
+
+  it('Handles o\'clock times', () => {
+    const timeInWords = convertTimeToWords('15:00');
+    expect(timeInWords).toBe('three o\'clock');
+  });
 });
