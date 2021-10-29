@@ -1,9 +1,56 @@
 // expecting numeric time to be in a format like '8:15' or '12:30'
-export function convertTimeToWords(numericTime) {
-  // TODO: real code goes here!
-  if (numericTime === '0:00') {
-    return 'midnight';
+
+function getHourDescriptionFromNumeric(numericValue) {
+  const hours = ['midnight', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'ten', 'eleven', 'midday', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'ten', 'eleven'];
+
+  if (numericValue === 0 || numericValue === 24) {
+    return hours[numericValue];
   }
 
-  return 'half past eight';
+  return hours[numericValue];
+}
+
+function getMinuteDescriptionFromNumeric(numericValue) {
+  const minutes = ['o\'clock', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'quarter', 'sixteen',
+  'seventeen', 'eighteen', 'nineteen', 'twenty', 'twenty one', 'twenty two', 'twenty three', 'twenty four', 'twenty five',
+  'twenty six', 'twenty seven', 'twenty eight', 'twenty nine', 'half'];
+
+  const parsedNumericValue = numericValue > 30 ? (30 + (30 - numericValue)) : numericValue;
+
+  return minutes[parsedNumericValue];
+}
+
+function getRelativeDescription(minutes) {
+  if (minutes === 0) {
+    return '';
+  } else if (minutes > 30) {
+    return ' to ';
+  } else {
+    return ' past ';
+  }
+}
+
+function getNumericalComponents(timeString) {
+  const [hours, minutes] = timeString.split(':');
+
+  return [parseInt(hours), parseInt(minutes)];
+}
+
+export function convertTimeToWords(timeString) {
+  const [hours, minutes] = getNumericalComponents(timeString);
+  const parsedHours = minutes > 30 ? hours + 1 : hours;
+  const hourString = getHourDescriptionFromNumeric(parsedHours);
+
+  if (minutes === 0) {
+    const oClock = ![0, 12].includes(hours) ? ' o\'clock' : '';
+    return hourString + oClock;
+  }
+
+  const relativeDescription = getRelativeDescription(minutes);
+  const minuteString = getMinuteDescriptionFromNumeric(minutes);
+
+  return minuteString + relativeDescription + hourString;
 }
