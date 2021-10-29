@@ -41,17 +41,14 @@ function getNumericalComponents(timeString) {
 
 export function convertTimeToWords(timeString) {
   const [hours, minutes] = getNumericalComponents(timeString);
-
-  if (hours === 0 && minutes === 0) {
-    return 'midnight';
-  }
-
-  if (hours === 12 && minutes === 0) {
-    return 'midday';
-  }
-
   const parsedHours = minutes > 30 ? hours + 1 : hours;
   const hourString = getHourDescriptionFromNumeric(parsedHours);
+
+  if (minutes === 0) {
+    const oClock = ![0, 12].includes(hours) ? ' o\'clock' : '';
+    return hourString + oClock;
+  }
+
   const relativeDescription = getRelativeDescription(minutes);
   const minuteString = getMinuteDescriptionFromNumeric(minutes);
 
