@@ -1,21 +1,35 @@
 // expecting numeric time to be in a format like '8:15' or '12:30'
 
-// map numbers to words // ? needs to check for minutes vs hours
-// 0 o' clock -> minutes
-// 0 midnight -> hours
-// one to nineteen
-// 12 -> midday -> hours
-// 15 -> quarter -> minutes
-// twenty
-// 30 -> half
+function getHourDescriptionFromNumeric(numericValue) {
+  const hours = ['midnight', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'ten', 'eleven', 'midday', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'ten', 'eleven'];
+
+  if (numericValue === 0 || numericValue === 24) {
+    return hours[numericValue];
+  }
+
+  return hours[numericValue];
+}
+
+function getMinuteDescriptionFromNumeric(numericValue) {
+  const minutes = ['o\'clock', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+  'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'quarter', 'sixteen',
+  'seventeen', 'eighteen', 'nineteen', 'twenty', 'twenty one', 'twenty two', 'twenty three', 'twenty four', 'twenty five',
+  'twenty six', 'twenty seven', 'twenty eight', 'twenty nine', 'half'];
+
+  const parsedNumericValue = numericValue > 30 ? (30 + (30 - numericValue)) : numericValue;
+
+  return minutes[parsedNumericValue];
+}
 
 function getRelativeDescription(minutes) {
   if (minutes === 0) {
     return '';
   } else if (minutes > 30) {
-    return 'to';
+    return ' to ';
   } else {
-    return 'past';
+    return ' past ';
   }
 }
 
@@ -26,10 +40,20 @@ function getNumericalComponents(timeString) {
 }
 
 export function convertTimeToWords(timeString) {
-  // TODO: real code goes here!
-  if (numericTime === '0:00') {
+  const [hours, minutes] = getNumericalComponents(timeString);
+
+  if (hours === 0 && minutes === 0) {
     return 'midnight';
   }
 
-  return 'half past eight';
+  if (hours === 12 && minutes === 0) {
+    return 'midday';
+  }
+
+  const parsedHours = minutes > 30 ? hours + 1 : hours;
+  const hourString = getHourDescriptionFromNumeric(parsedHours);
+  const relativeDescription = getRelativeDescription(minutes);
+  const minuteString = getMinuteDescriptionFromNumeric(minutes);
+
+  return minuteString + relativeDescription + hourString;
 }
